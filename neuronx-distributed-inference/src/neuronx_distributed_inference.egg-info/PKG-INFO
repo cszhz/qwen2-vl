@@ -1,0 +1,28 @@
+Metadata-Version: 2.1
+Name: neuronx-distributed-inference
+Version: 0.2.0
+Summary: UNKNOWN
+Home-page: UNKNOWN
+License: UNKNOWN
+Keywords: aws neuron
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Requires-Python: >=3.7
+Provides-Extra: flux
+Provides-Extra: test
+License-File: LICENSE
+License-File: NOTICE
+
+UNKNOWN
+

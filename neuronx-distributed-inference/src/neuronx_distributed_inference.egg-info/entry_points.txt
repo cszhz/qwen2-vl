@@ -1,0 +1,4 @@
+[console_scripts]
+inference_demo = neuronx_distributed_inference.inference_demo:main
+nxdi_distributed_launcher = neuronx_distributed_inference.scripts.nxdi_distributed_launcher:main
+
