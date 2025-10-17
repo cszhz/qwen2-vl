@@ -23,7 +23,7 @@ from model_config import messages,num_img_per_prompt
 
 
 def run_qwen2_generate():
-    model_path='/home/ubuntu/qwenvl/qwen-vl-main/neuronx-distributed-inference/examples/qwen2_vl/models/Qwen/Qwen2-VL-7B-Instruct'
+    model_path='/home/ubuntu/qwen2-vl/neuronx-distributed-inference/examples/qwen2_vl/models/Qwen/Qwen2-VL-7B-Instruct'
     traced_model_path='./traced_models'
     torch.manual_seed(0)
 
@@ -35,8 +35,8 @@ def run_qwen2_generate():
     #seq_len = 4096 #1 image
     seq_len = 8192 #2 image
     generation_config = GenerationConfig.from_pretrained(model_path)
-    generation_config.max_new_tokens = 200
-    generation_config.max_tokens = 8192
+    generation_config.max_new_tokens = 1
+    #generation_config.max_tokens = 8192
     generation_config.top_p = 1.0
     generation_config.temperature = 0.2
     generation_config.do_sample = False
@@ -62,7 +62,7 @@ def run_qwen2_generate():
     tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="right")
     tokenizer.pad_token = tokenizer.bos_token
     
-    traced_model_path=traced_model_path+f'/seq_len_{seq_len}-image_{num_img_per_prompt}'
+    traced_model_path=traced_model_path+f'/seq_len_{seq_len}_tp_{tp_degree}-image_{num_img_per_prompt}'
 
     print("\nLoading model from compiled checkpoint...")
     model = NeuronQwen2VLForCausalLM(traced_model_path)
@@ -113,6 +113,12 @@ def run_qwen2_generate():
         generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
     )
 
+    print("DEBUG: 输入形状:", [tensor.shape for tensor in [inputs["input_ids"], inputs["attention_mask"],
+    correct_shape_pixel_values, inputs.get('image_grid_thw') if inputs.get('image_grid_thw') is not None else None]])
+    print("DEBUG: 输入类型:", [tensor.dtype for tensor in [inputs["input_ids"], inputs["attention_mask"],
+    correct_shape_pixel_values, inputs.get('image_grid_thw') if inputs.get('image_grid_thw') is not None else None]])
+
+
     from datetime import datetime
     import numpy as np
 
@@ -149,7 +155,7 @@ def run_qwen2_generate():
     print("Images:", num_img_per_prompt)
     print('Average time taken(s): ', avg_time)
 
-    print("QPS:", times/total_time)
+    print("QPS:", times/total_time/(tp_degree/2))
     print("Latency P50: {:.3f}".format(np.percentile(time_taken_list, 50)*1000.0))
     print("Latency P90: {:.3f}".format(np.percentile(time_taken_list, 90)*1000.0))
     print("Latency P95: {:.3f}".format(np.percentile(time_taken_list, 95)*1000.0))

@@ -23,7 +23,7 @@ from model_config import messages,num_img_per_prompt
 
 
 def run_qwen2_generate():
-    model_path='/home/ubuntu/qwenvl/qwen-vl-main/neuronx-distributed-inference/examples/qwen2_vl/models/Qwen/Qwen2-VL-7B-Instruct'
+    model_path='/home/ubuntu/qwen2-vl/neuronx-distributed-inference/examples/qwen2_vl/models/Qwen/Qwen2-VL-7B-Instruct'
     traced_model_path='./traced_models'
     torch.manual_seed(0)
 
@@ -34,9 +34,11 @@ def run_qwen2_generate():
     batch_size = 1
     #seq_len = 4096 #1 image
     seq_len = 8192 #2 image
+    #seq_len = 32768 #2 image
+    #seq_len = 32768 #2 image
     generation_config = GenerationConfig.from_pretrained(model_path)
     generation_config.max_new_tokens = 200
-    generation_config.max_tokens = 5000
+    #generation_config.max_tokens = 5000
     generation_config.top_p = 1.0
     generation_config.temperature = 0.2
     generation_config.do_sample = False
@@ -64,7 +66,7 @@ def run_qwen2_generate():
     ##if not os.path.exists(traced_model_path):
     # Compile and save model.
     
-    traced_model_path=traced_model_path+f'/seq_len_{seq_len}-image_{num_img_per_prompt}'
+    traced_model_path=traced_model_path+f'/seq_len_{seq_len}_tp_{tp_degree}-image_{num_img_per_prompt}'
 
     if True:
         print("\nCompiling and saving model...")
